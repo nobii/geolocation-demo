@@ -100,7 +100,7 @@ function calcDistance(loc1, loc2) {
         log('More or less ' + coords.accuracy + ' meters.');
 
         var distance = calcDistance(loc, TARGET_LOC);
-        log('distance: ' + distance * 1000 + 'm');
+        log('distance: ' + distance * 1000 + ' meters.');
 
         log('[render map]');
         renderMap(loc);
