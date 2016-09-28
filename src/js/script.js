@@ -27,7 +27,7 @@ function renderMap (lat, lng) {
             lng: lng
         },
         scrollwheel: false,
-        zoom: 8
+        zoom: 15
     });
 }
 
