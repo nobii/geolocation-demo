@@ -1,6 +1,6 @@
 {
-  "name": "kayac-html5-starter",
-  "description": "kayac-html5-starter development.",
+  "name": "geolocation-demo",
+  "description": "geolocation-demo development.",
   "private": true,
   "ignore": [
     "**/.*",
