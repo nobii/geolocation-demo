@@ -13,7 +13,7 @@
     };
 
     navigator.geolocation.getCurrentPosition(function (pos) {
-        alert(JSON.stringify(pos));
+        alert([pos.coords.longitude, pos.coords.latitude].join(', '));
     }, function (err) {
         console.error(err);
         alert('error!!');

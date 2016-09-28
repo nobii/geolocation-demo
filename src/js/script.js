@@ -13,7 +13,10 @@
 
     navigator.geolocation.getCurrentPosition(
         (pos) => {
-            alert(JSON.stringify(pos));
+            alert([
+                pos.coords.longitude,
+                pos.coords.latitude
+            ].join(', '));
         },
         (err) => {
             console.error(err);
