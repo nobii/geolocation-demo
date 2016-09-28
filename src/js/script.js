@@ -17,7 +17,6 @@ function getGeolocation (cb) {
         },
         opts
     );
-
 }
 
 
@@ -39,11 +38,16 @@ function renderMap (lat, lng) {
         return;
     }
 
+    console.log('[get geolocation] loading...');
+
     getGeolocation((err, pos) => {
         if (err) {
             console.error(err);
             return;
         }
+
+        console.log('[render map] start');
+
         renderMap(pos.lat, pos.lng);
     });
 })();

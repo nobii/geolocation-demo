@@ -35,11 +35,16 @@ function renderMap(lat, lng) {
         return;
     }
 
+    console.log('[get geolocation] loading...');
+
     getGeolocation(function (err, pos) {
         if (err) {
             console.error(err);
             return;
         }
+
+        console.log('[render map] start');
+
         renderMap(pos.lat, pos.lng);
     });
 })();
