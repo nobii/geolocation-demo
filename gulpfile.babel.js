@@ -17,7 +17,7 @@ import watch from 'gulp-watch';
 // const
 const SRC = './src';
 const CONFIG = './src/config';
-const HTDOCS = './public';
+const HTDOCS = './demo';
 const BASE_PATH = '/';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 
