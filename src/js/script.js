@@ -7,10 +7,7 @@ function getGeolocation (cb) {
 
     navigator.geolocation.getCurrentPosition(
         (pos) => {
-            cb(null, {
-                lat: pos.coords.latitude,
-                lng: pos.coords.longitude
-            });
+            cb(null, pos.coords);
         },
         (err) => {
             cb(err);
@@ -19,15 +16,20 @@ function getGeolocation (cb) {
     );
 }
 
-function renderMap (pos) {
+function renderMap (lat, lng) {
+    const loc = {
+        lat: lat,
+        lng: lng
+    };
+    
     const map = new google.maps.Map(document.getElementById('map'), {
-        center: pos,
+        center: loc,
         scrollwheel: false,
         zoom: 15
     });
 
     addMarker(map, {
-        pos: pos,
+        loc: loc,
         title: 'Your location'
     });
 }
@@ -35,7 +37,7 @@ function renderMap (pos) {
 function addMarker (map, opts) {
     new google.maps.Marker({
         map: map,
-        position: opts.pos,
+        position: opts.loc,
         title: opts.title
     });
 }
@@ -49,14 +51,16 @@ function addMarker (map, opts) {
 
     console.log('[get geolocation] loading...');
 
-    getGeolocation((err, pos) => {
+    getGeolocation((err, coords) => {
         if (err) {
             console.error(err);
             return;
         }
 
-        console.log('[render map] start');
-
-        renderMap(pos);
+        console.log('[get geolocation] done.');
+        console.log('More or less ' + coords.accuracy + ' meters.');
+        
+        console.log('[render map]');
+        renderMap(coords.latitude, coords.longitude);
     });
 })();
