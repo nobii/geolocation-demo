@@ -19,15 +19,24 @@ function getGeolocation (cb) {
     );
 }
 
-
-function renderMap (lat, lng) {
+function renderMap (pos) {
     const map = new google.maps.Map(document.getElementById('map'), {
-        center: {
-            lat: lat,
-            lng: lng
-        },
+        center: pos,
         scrollwheel: false,
         zoom: 15
+    });
+
+    addMarker(map, {
+        pos: pos,
+        title: 'Your location'
+    });
+}
+
+function addMarker (map, opts) {
+    new google.maps.Marker({
+        map: map,
+        position: opts.pos,
+        title: opts.title
     });
 }
 
@@ -48,6 +57,6 @@ function renderMap (lat, lng) {
 
         console.log('[render map] start');
 
-        renderMap(pos.lat, pos.lng);
+        renderMap(pos);
     });
 })();
