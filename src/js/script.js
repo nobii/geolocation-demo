@@ -4,10 +4,6 @@ const TARGET_LOC = {
 };
 
 
-function log (text = '') {
-    document.getElementById('logger').innerHTML += text + '<br />';
-}
-
 function getGeolocation (cb) {
     const opts = {
         enableHighAccuracy: true,
@@ -26,22 +22,20 @@ function getGeolocation (cb) {
     );
 }
 
-function renderMap (loc) {
+function renderMap (userLoc, userAcc) {
     const map = new google.maps.Map(document.getElementById('map'), {
-        center: loc,
+        center: userLoc,
         scrollwheel: false,
-        zoom: 15
-    });
-
-    addMarker(map, {
-        loc: loc,
-        title: 'Your location'
+        zoom: 18
     });
 
     addMarker(map, {
         loc: TARGET_LOC,
         title: 'Target location'
     });
+
+    drawCircle(map, userLoc, userAcc);
+    drawLine(map, userLoc, TARGET_LOC);
 }
 
 function addMarker (map, opts) {
@@ -77,6 +71,32 @@ function calcDistance (loc1, loc2) {
     return distance;
 }
 
+function drawCircle (map, centerLoc, radius) {
+    new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: centerLoc,
+        radius: radius
+    });
+}
+
+function drawLine (map, loc1, loc2) {
+    const path = new google.maps.Polyline({
+        path: [ loc1, loc2 ],
+        geodesic: true,
+        strokeColor: '#0000FF',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+
+    path.setMap(map);
+}
+
+
 
 (function () {
     if (!navigator.geolocation) {
@@ -84,7 +104,7 @@ function calcDistance (loc1, loc2) {
         return;
     }
 
-    log('[get geolocation] loading...');
+    console.log('[get geolocation] loading...');
 
     getGeolocation((err, coords) => {
         if (err) {
@@ -97,14 +117,14 @@ function calcDistance (loc1, loc2) {
             lng: coords.longitude
         };
 
-
-        log('[get geolocation] done.');
-        log(`More or less ${coords.accuracy} meters.`);
+        console.log('[get geolocation] done.');
+        console.log(`More or less ${coords.accuracy} meters.`);
 
         const distance = calcDistance(loc, TARGET_LOC);
-        log(`distance: ${distance * 1000} meters.`);
+        console.log(`distance: ${distance * 1000} meters.`);
+        document.getElementById('result').innerHTML = `${distance * 1000} meters`;
         
-        log('[render map]');
-        renderMap(loc);
+        console.log('[render map]');
+        renderMap(loc, coords.accuracy);
     });
 })();

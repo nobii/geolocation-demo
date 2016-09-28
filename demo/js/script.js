@@ -6,12 +6,6 @@ var TARGET_LOC = {
     lng: 139.624930
 };
 
-function log() {
-    var text = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-
-    document.getElementById('logger').innerHTML += text + '<br />';
-}
-
 function getGeolocation(cb) {
     var opts = {
         enableHighAccuracy: true,
@@ -26,22 +20,20 @@ function getGeolocation(cb) {
     }, opts);
 }
 
-function renderMap(loc) {
+function renderMap(userLoc, userAcc) {
     var map = new google.maps.Map(document.getElementById('map'), {
-        center: loc,
+        center: userLoc,
         scrollwheel: false,
-        zoom: 15
-    });
-
-    addMarker(map, {
-        loc: loc,
-        title: 'Your location'
+        zoom: 18
     });
 
     addMarker(map, {
         loc: TARGET_LOC,
         title: 'Target location'
     });
+
+    drawCircle(map, userLoc, userAcc);
+    drawLine(map, userLoc, TARGET_LOC);
 }
 
 function addMarker(map, opts) {
@@ -77,13 +69,38 @@ function calcDistance(loc1, loc2) {
     return distance;
 }
 
+function drawCircle(map, centerLoc, radius) {
+    new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: centerLoc,
+        radius: radius
+    });
+}
+
+function drawLine(map, loc1, loc2) {
+    var path = new google.maps.Polyline({
+        path: [loc1, loc2],
+        geodesic: true,
+        strokeColor: '#0000FF',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+
+    path.setMap(map);
+}
+
 (function () {
     if (!navigator.geolocation) {
         console.error('geolocation is not supported');
         return;
     }
 
-    log('[get geolocation] loading...');
+    console.log('[get geolocation] loading...');
 
     getGeolocation(function (err, coords) {
         if (err) {
@@ -96,14 +113,15 @@ function calcDistance(loc1, loc2) {
             lng: coords.longitude
         };
 
-        log('[get geolocation] done.');
-        log('More or less ' + coords.accuracy + ' meters.');
+        console.log('[get geolocation] done.');
+        console.log('More or less ' + coords.accuracy + ' meters.');
 
         var distance = calcDistance(loc, TARGET_LOC);
-        log('distance: ' + distance * 1000 + ' meters.');
+        console.log('distance: ' + distance * 1000 + ' meters.');
+        document.getElementById('result').innerHTML = distance * 1000 + ' meters';
 
-        log('[render map]');
-        renderMap(loc);
+        console.log('[render map]');
+        renderMap(loc, coords.accuracy);
     });
 })();
 
