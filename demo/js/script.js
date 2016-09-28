@@ -26,12 +26,7 @@ function getGeolocation(cb) {
     }, opts);
 }
 
-function renderMap(lat, lng) {
-    var loc = {
-        lat: lat,
-        lng: lng
-    };
-
+function renderMap(loc) {
     var map = new google.maps.Map(document.getElementById('map'), {
         center: loc,
         scrollwheel: false,
@@ -57,6 +52,31 @@ function addMarker(map, opts) {
     });
 }
 
+function calcDistance(loc1, loc2) {
+    var EARTH_RADIUS = 6378.1;
+
+    var lat1 = loc1.lat;
+    var radianLat1 = lat1 * (Math.PI / 180);
+
+    var lng1 = loc1.lng;
+    var radianLng1 = lng1 * (Math.PI / 180);
+
+    var lat2 = loc2.lat;
+    var radianLat2 = lat2 * (Math.PI / 180);
+
+    var lng2 = loc2.lng;
+    var radianLng2 = lng2 * (Math.PI / 180);
+
+    var diffLat = radianLat1 - radianLat2;
+    var diffLng = radianLng1 - radianLng2;
+    var sinLat = Math.sin(diffLat / 2);
+    var sinLng = Math.sin(diffLng / 2);
+    var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLng, 2.0);
+    var distance = EARTH_RADIUS * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
+
+    return distance;
+}
+
 (function () {
     if (!navigator.geolocation) {
         console.error('geolocation is not supported');
@@ -71,11 +91,18 @@ function addMarker(map, opts) {
             return;
         }
 
+        var loc = {
+            lat: coords.latitude,
+            lng: coords.longitude
+        };
+
         log('[get geolocation] done.');
         log('More or less ' + coords.accuracy + ' meters.');
 
         log('[render map]');
-        renderMap(coords.latitude, coords.longitude);
+        renderMap(loc);
+
+        log('distance: ' + calcDistance(loc, TARGET_LOC));
     });
 })();
 
