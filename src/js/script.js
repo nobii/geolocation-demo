@@ -1,3 +1,7 @@
+function log (text = '') {
+    document.getElementById('logger').innerHTML += text + '<br />';
+}
+
 function getGeolocation (cb) {
     const opts = {
         enableHighAccuracy: true,
@@ -49,7 +53,7 @@ function addMarker (map, opts) {
         return;
     }
 
-    console.log('[get geolocation] loading...');
+    log('[get geolocation] loading...');
 
     getGeolocation((err, coords) => {
         if (err) {
@@ -57,10 +61,10 @@ function addMarker (map, opts) {
             return;
         }
 
-        console.log('[get geolocation] done.');
-        console.log('More or less ' + coords.accuracy + ' meters.');
+        log('[get geolocation] done.');
+        log('More or less ' + coords.accuracy + ' meters.');
         
-        console.log('[render map]');
+        log('[render map]');
         renderMap(coords.latitude, coords.longitude);
     });
 })();

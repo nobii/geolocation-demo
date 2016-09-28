@@ -1,6 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+function log() {
+    var text = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+
+    document.getElementById('logger').innerHTML += text + '<br />';
+}
+
 function getGeolocation(cb) {
     var opts = {
         enableHighAccuracy: true,
@@ -47,7 +53,7 @@ function addMarker(map, opts) {
         return;
     }
 
-    console.log('[get geolocation] loading...');
+    log('[get geolocation] loading...');
 
     getGeolocation(function (err, coords) {
         if (err) {
@@ -55,10 +61,10 @@ function addMarker(map, opts) {
             return;
         }
 
-        console.log('[get geolocation] done.');
-        console.log('More or less ' + coords.accuracy + ' meters.');
+        log('[get geolocation] done.');
+        log('More or less ' + coords.accuracy + ' meters.');
 
-        console.log('[render map]');
+        log('[render map]');
         renderMap(coords.latitude, coords.longitude);
     });
 })();
