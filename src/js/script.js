@@ -1,3 +1,9 @@
+const TARGET_LOC = {
+    lat: 35.463132,
+    lng: 139.624930
+};
+
+
 function log (text = '') {
     document.getElementById('logger').innerHTML += text + '<br />';
 }
@@ -35,6 +41,11 @@ function renderMap (lat, lng) {
     addMarker(map, {
         loc: loc,
         title: 'Your location'
+    });
+
+    addMarker(map, {
+        loc: TARGET_LOC,
+        title: 'Target location'
     });
 }
 
