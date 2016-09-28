@@ -99,10 +99,11 @@ function calcDistance(loc1, loc2) {
         log('[get geolocation] done.');
         log('More or less ' + coords.accuracy + ' meters.');
 
+        var distance = calcDistance(loc, TARGET_LOC);
+        log('distance: ' + distance * 1000 + 'm');
+
         log('[render map]');
         renderMap(loc);
-
-        log('distance: ' + calcDistance(loc, TARGET_LOC));
     });
 })();
 
